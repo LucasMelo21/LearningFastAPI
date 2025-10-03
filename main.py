@@ -1,6 +1,8 @@
 from typing import List, Optional
 
 from fastapi.responses import JSONResponse
+from fastapi import Path
+
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi import status
@@ -26,7 +28,10 @@ async def get_cursos():
     return cursos
 
 @app.get('/cursos/{curso_id}')
-async def get_curso(curso_id: int):
+async def get_curso(curso_id: int = Path(
+                                         title='ID do Curso',
+                                         description='Deve ser entre 1 e 2',
+                                         gt=0, lt=3)):
     try:
         curso = cursos[curso_id]
         curso.update({"id":curso_id})
