@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from fastapi.responses import JSONResponse
 from fastapi import Path
+from fastapi import Query
 
 from fastapi import FastAPI
 from fastapi import HTTPException
@@ -66,6 +67,14 @@ async def delete_curso(curso_id: int):
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Não existe curso com o id {curso_id}")
+
+@app.get('/calculadora')
+async def calcular(a : int = Query(default=None, gt=5), b : int = Query(default=None, gt=10), c : Optional[int] = None):
+    soma : int = a + b
+    if c:
+        soma += c
+    return {"resultado" : soma}
+
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
