@@ -1,5 +1,5 @@
 from typing import  Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class Curso(BaseModel):
@@ -7,6 +7,20 @@ class Curso(BaseModel):
     titulo: str
     aulas: int
     horas: int
+
+    @validator('titulo')
+    def validar_titulo(cls, value):
+        palavras = value.lower().split(' ')
+        if len(palavras) < 2:
+            raise ValueError('O título deve ter ao menos 2 palavras')
+        return value
+
+    @validator('aulas')
+    def validar_aulas(cls, value):
+        if value <= 1:
+            raise ValueError('Deve haver ao menos duas aulas no curso')
+        return value
+
 
 cursos = [
     Curso(
